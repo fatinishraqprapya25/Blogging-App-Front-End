@@ -24,7 +24,7 @@ export default function Navbar() {
                 } border-b border-gray-200 sticky top-0 z-50 transition-all duration-300 bg-white`}
         >
             <Container extraClasses="flex items-center justify-between ">
-                {/* Left Side */}
+
                 <div className="flex items-center gap-4">
                     {/* Logo */}
                     <div className="text-xl font-bold">Medium</div>
