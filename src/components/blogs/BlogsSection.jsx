@@ -15,9 +15,9 @@ export default function BlogsSection() {
 
     return <>
         <Container>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-6 gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                 {blogs.map((blog, index) => {
-                    return <Blog index={index} blog={blog} />
+                    return <Blog key={index} index={index} blog={blog} />
                 })}
             </div>
 
