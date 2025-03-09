@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [isLoggedIn] = useAuth();
 
     const navigate = useNavigate();
+
+    if (isLoggedIn) {
+        navigate("/");
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -77,7 +83,13 @@ export default function Login() {
                 </form>
 
                 <div className="mt-4 text-center text-gray-600">
-                    <p>Don't have an account? <a href="/register" className="text-blue-500 hover:underline">Register</a></p>
+                    <p>
+                        Don't have an account?{" "}
+                        <Link to="/register" className="text-gray-800 hover:underline font-medium">Register</Link>
+                    </p>
+                    <p className="mt-2">
+                        <Link href="/forgot-password" className="text-gray-800 font-medium hover:underline">Forgot Password?</Link>
+                    </p>
                 </div>
             </div>
         </div>
