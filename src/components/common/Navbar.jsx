@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bell, Pencil, User } from "lucide-react";
-import Container from "../common/Container";
+import Container from "./Container";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
