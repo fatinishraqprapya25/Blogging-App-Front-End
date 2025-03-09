@@ -27,3 +27,5 @@ const useAuth = () => {
         return { isLoggedIn };
     }, []);
 }
+
+export default useAuth;
