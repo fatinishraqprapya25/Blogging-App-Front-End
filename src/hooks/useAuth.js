@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const useAuth = () => {
     const [isLoggedIn, setLoggedIn] = useState(false);
@@ -24,8 +24,8 @@ const useAuth = () => {
             }
         }
         changeLoggedInStatus();
-        return { isLoggedIn };
     }, []);
+    return [isLoggedIn, setLoggedIn];
 }
 
 export default useAuth;

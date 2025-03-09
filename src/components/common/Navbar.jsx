@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Bell, Pencil, User } from "lucide-react";
 import Container from "./Container";
+import useAuth from "../../hooks/useAuth";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
+    const [isLoggedIn] = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -48,10 +50,17 @@ export default function Navbar() {
                         Write
                     </button>
 
-                    {/* User Icon */}
-                    <button className="p-2 rounded-full hover:bg-white hover:text-black transition">
-                        <User className="w-6 h-6" />
-                    </button>
+                    {isLoggedIn ? <>
+                        {/* User Icon */}
+                        <button className="p-2 rounded-full hover:bg-white hover:text-black transition">
+                            <User className="w-6 h-6" />
+                        </button>
+                    </> : <>
+                        <button>Login</button>
+                        <button>Register</button>
+
+                    </>}
+
                 </div>
             </Container>
 
