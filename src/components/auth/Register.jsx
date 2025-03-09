@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Button from "../common/Button";
 import { useNavigate, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import Input from "./Input";
 
 export default function Register() {
     const [firstName, setFirstName] = useState("");
@@ -73,14 +74,7 @@ export default function Register() {
                         <label htmlFor="firstName" className="block text-gray-700 font-semibold mb-1">
                             First Name
                         </label>
-                        <input
-                            type="text"
-                            id="firstName"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your first name"
-                        />
+                        <Input type="fisrtName" name="firstName" id="firstName" value={firstName} handler={setFirstName} placeholder="First Name" />
                     </div>
 
                     {/* Last Name */}
@@ -88,14 +82,7 @@ export default function Register() {
                         <label htmlFor="lastName" className="block text-gray-700 font-semibold mb-1">
                             Last Name
                         </label>
-                        <input
-                            type="text"
-                            id="lastName"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your last name"
-                        />
+                        <Input type="lastName" name="lastName" id="lastName" value={lastName} handler={setLastName} placeholder="Last Name" />
                     </div>
 
                     {/* Email */}
@@ -103,14 +90,7 @@ export default function Register() {
                         <label htmlFor="email" className="block text-gray-700 font-semibold mb-1">
                             Email
                         </label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your email"
-                        />
+                        <Input type="email" name="email" id="firstName" value={email} handler={setEmail} placeholder="First Name" />
                     </div>
 
                     {/* Phone */}
@@ -118,14 +98,7 @@ export default function Register() {
                         <label htmlFor="phone" className="block text-gray-700 font-semibold mb-1">
                             Phone Number
                         </label>
-                        <input
-                            type="text"
-                            id="phone"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your phone number"
-                        />
+                        <Input type="phone" name="phone" id="phone" placeholder="Contact Number" value={phone} handler={setPhone} />
                     </div>
 
                     {/* Password */}
