@@ -22,7 +22,7 @@ export default function Navbar() {
                 {/* Left Side */}
                 <div className="flex items-center gap-4">
                     {/* Logo */}
-                    <div className="text-xl font-bold">MyLogo</div>
+                    <div className="text-xl font-bold">Medium</div>
 
                     {/* Search Bar */}
                     <div className="relative">
