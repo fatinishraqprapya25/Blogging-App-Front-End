@@ -22,7 +22,7 @@ export default function Category() {
 
     return (
         <Container>
-            <div className="flex flex-wrap gap-3 mt-3 ms-3">
+            <div className="flex flex-wrap gap-3 mt-4 ms-3">
                 {categories.map((category, index) => {
                     return (
                         <Link
