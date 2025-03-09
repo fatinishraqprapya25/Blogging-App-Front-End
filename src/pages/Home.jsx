@@ -10,6 +10,7 @@ export default function Home() {
         <Category />
         <BlogsSection />
         <br />
+        <br />
         <Footer />
     </>
 }
