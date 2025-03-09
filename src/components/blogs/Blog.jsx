@@ -22,11 +22,11 @@ export default function Blog({ index, blog }) {
             />
 
             {/* Title and Description Container */}
-            <div className="absolute inset-0 bg-black opacity-50"></div> {/* Overlay for readability */}
+            <div className="absolute inset-0 bg-black opacity-80"></div> {/* Overlay for readability */}
 
             <div className="absolute inset-0 flex flex-col justify-center p-6 text-white">
                 <h1 className="text-2xl font-bold mb-4 leading-7">{blog.title}</h1>
-                <p className="text-lg mb-4 leading-5">{shorterDescription}</p>
+                <p className="text-lg mb-4 leading-5 text-gray-200">{shorterDescription}</p>
                 <Link
                     href={`/blog/${blog._id}`}
                     className="text-white bg-gray-800 d-block w-[95px] py-1 text-center rounded-md hover:bg-black text-sm font-bold transition duration-150"
