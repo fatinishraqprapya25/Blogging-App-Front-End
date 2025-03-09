@@ -1,18 +1,37 @@
 import React, { useState } from "react";
+import Button from "../common/Button";
+import { useNavigate } from "react-router-dom";
 
-export default function LoginForm() {
+export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !password) {
             setError("Both fields are required.");
             return;
         }
         setError("");
-        console.log("Form Submitted", { email, password });
+        const requestData = { email, password };
+        const response = await fetch("https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        });
+        const result = await response.json();
+        if (result.success) {
+            const token = result.token;
+            localStorage.setItem("authToken", token);
+            navigate("/");
+        } else {
+            alert(result.message);
+        }
     };
 
     return (
@@ -54,12 +73,7 @@ export default function LoginForm() {
                     </div>
 
                     {/* Submit Button */}
-                    <button
-                        type="submit"
-                        className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition"
-                    >
-                        Login
-                    </button>
+                    <Button styles="w-full text-md py-3 hover:bg-black">Login</Button>
                 </form>
 
                 <div className="mt-4 text-center text-gray-600">
