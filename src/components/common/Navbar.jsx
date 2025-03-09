@@ -59,7 +59,7 @@ export default function Navbar() {
                         </button>
                     </> : <>
                         <Link to="/login">Login</Link>
-                        <Link><Button>Register</Button></Link>
+                        <Link to="/register"><Button>Register</Button></Link>
 
                     </>}
 
