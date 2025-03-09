@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../common/Button";
 import { useNavigate, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import Input from "./Input";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -51,31 +52,13 @@ export default function Login() {
                     {/* Email Field */}
                     <div className="mb-4">
                         <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your email"
-                            required
-                        />
+                        <Input type="email" name="email" id="email" value={email} handler={setEmail} placeholder="Email Address" />
                     </div>
 
                     {/* Password Field */}
                     <div className="mb-6">
                         <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your password"
-                            required
-                        />
+                        <Input type="password" name="password" id="password" value={password} handler={setPassword} placeholder="Email Address" />
                     </div>
 
                     {/* Submit Button */}

@@ -47,7 +47,6 @@ export default function Register() {
             const result = await response.json();
 
             if (result.success) {
-                localStorage.setItem("authToken", result.token);
                 navigate("/");
             } else {
                 alert(result.message);
