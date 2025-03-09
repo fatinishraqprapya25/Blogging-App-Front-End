@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bell, Pencil, User } from "lucide-react";
+import Container from "../common/Container";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -18,7 +19,7 @@ export default function Navbar() {
             className={`w-full px-6 ${scrolled ? "py-2" : "py-5"
                 } border-b border-gray-200 sticky top-0 z-50 transition-all duration-300`}
         >
-            <div className="flex items-center justify-between w-full md:w-[80%] mx-auto">
+            <Container extraClasses="flex items-center justify-between ">
                 {/* Left Side */}
                 <div className="flex items-center gap-4">
                     {/* Logo */}
@@ -52,7 +53,7 @@ export default function Navbar() {
                         <User className="w-6 h-6" />
                     </button>
                 </div>
-            </div>
+            </Container>
 
         </nav>
     );
