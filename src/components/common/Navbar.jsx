@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Bell, Pencil, User } from "lucide-react";
 import Container from "./Container";
 import useAuth from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
+import Button from "./Button";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -56,8 +58,8 @@ export default function Navbar() {
                             <User className="w-6 h-6" />
                         </button>
                     </> : <>
-                        <button>Login</button>
-                        <button>Register</button>
+                        <Link to="/login">Login</Link>
+                        <Link><Button>Register</Button></Link>
 
                     </>}
 
