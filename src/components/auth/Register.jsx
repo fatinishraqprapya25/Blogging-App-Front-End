@@ -47,7 +47,7 @@ export default function Register() {
             const result = await response.json();
 
             if (result.success) {
-                navigate("/");
+                navigate("/verify", { state: { email } });
             } else {
                 alert(result.message);
             }
@@ -89,7 +89,7 @@ export default function Register() {
                         <label htmlFor="email" className="block text-gray-700 font-semibold mb-1">
                             Email
                         </label>
-                        <Input type="email" name="email" id="firstName" value={email} handler={setEmail} placeholder="First Name" />
+                        <Input type="email" name="email" id="email" value={email} handler={setEmail} placeholder="Email Address" />
                     </div>
 
                     {/* Phone */}
