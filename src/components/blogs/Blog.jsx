@@ -1,10 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Blog({ index, blog }) {
     const maxLength = 70;
     let shorterDescription = blog.description;
 
-    // Shorten the description if it's too long
     if (shorterDescription.length > maxLength) {
         shorterDescription = shorterDescription.substring(0, maxLength) + "...";
     }
@@ -27,12 +27,12 @@ export default function Blog({ index, blog }) {
             <div className="absolute inset-0 flex flex-col justify-center p-6 text-white">
                 <h1 className="text-2xl font-bold mb-4 leading-7">{blog.title}</h1>
                 <p className="text-lg mb-4 leading-5">{shorterDescription}</p>
-                <a
+                <Link
                     href={`/blog/${blog._id}`}
-                    className="text-white bg-black d-block w-[102px] py-1 text-center rounded-md hover:underline"
+                    className="text-white bg-gray-800 d-block w-[95px] py-1 text-center rounded-md hover:bg-black text-sm font-bold transition duration-150"
                 >
                     Read More
-                </a>
+                </Link>
             </div>
         </div>
     );

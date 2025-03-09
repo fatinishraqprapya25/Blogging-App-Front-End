@@ -17,7 +17,7 @@ export default function Navbar() {
     return (
         <nav
             className={`w-full px-6 ${scrolled ? "py-2" : "py-5"
-                } border-b border-gray-200 sticky top-0 z-50 transition-all duration-300`}
+                } border-b border-gray-200 sticky top-0 z-50 transition-all duration-300 bg-white`}
         >
             <Container extraClasses="flex items-center justify-between ">
                 {/* Left Side */}
