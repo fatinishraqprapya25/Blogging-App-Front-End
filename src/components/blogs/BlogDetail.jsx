@@ -72,26 +72,32 @@ export default function BlogDetail() {
         } else {
             const commentReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${id}`);
             const result = await commentReq.json();
+
             const data = result.data;
 
-            const updatedComments = await Promise.all(data.map(async (comment) => {
-                const userId = comment.userId;
+            if (data !== undefined) {
+                const updatedComments = await Promise.all(data.map(async (comment) => {
+                    const userId = comment.userId;
 
-                const userReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/user/${userId}`);
-                const user = await userReq.json();
-                const userName = user.data.firstName + " " + user.data.lastName;
-                comment.userName = userName;
-                comment.date = new Date(comment.createdAt).toLocaleDateString("en-GB", {
-                    year: "2-digit",
-                    month: "long",
-                    day: "2-digit"
-                });
-                return comment;
-            }));
+                    const userReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/user/${userId}`);
+                    const user = await userReq.json();
+                    const userName = user.data.firstName + " " + user.data.lastName;
+                    comment.userName = userName;
+                    comment.date = new Date(comment.createdAt).toLocaleDateString("en-GB", {
+                        year: "2-digit",
+                        month: "long",
+                        day: "2-digit"
+                    });
+                    return comment;
+                }));
 
-            setComments(updatedComments);
-            console.log(comments);
-            setLoadedComments(true);
+                setComments(updatedComments);
+                setLoadedComments(true);
+            } else {
+                setComments([]);
+                setLoadedComments(true);
+            }
+
         }
     };
 
@@ -177,19 +183,23 @@ export default function BlogDetail() {
 
                         {/* Display Comments */}
                         <div className="mt-6 space-y-6">
-                            {comments.map((comment, index) => (
-                                <div
-                                    key={index}
-                                    className="p-4 bg-gray-50 border border-gray-200 rounded-lg"
-                                >
-                                    <p className="font-semibold text-gray-800">{comment.userName}</p>
-                                    <p className="text-gray-700 mt-1">{comment.text}</p>
-                                    <p className="text-xs text-gray-500 mt-2">
-                                        {comment.date}
-                                    </p>
+                            {
+                                loadedComments && comments.length === 0 ? <p>
+                                    no comments found!
+                                </p> : comments.map((comment, index) => (
+                                    <div
+                                        key={index}
+                                        className="p-4 bg-gray-50 border border-gray-200 rounded-lg"
+                                    >
+                                        <p className="font-semibold text-gray-800">{comment.userName}</p>
+                                        <p className="text-gray-700 mt-1">{comment.text}</p>
+                                        <p className="text-xs text-gray-500 mt-2">
+                                            {comment.date}
+                                        </p>
 
-                                </div>
-                            ))}
+                                    </div>
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
