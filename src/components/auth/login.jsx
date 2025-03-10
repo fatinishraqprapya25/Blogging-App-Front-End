@@ -71,7 +71,7 @@ export default function Login() {
                         <Link to="/register" className="text-gray-800 hover:underline font-medium">Register</Link>
                     </p>
                     <p className="mt-2">
-                        <Link href="/forgot-password" className="text-gray-800 font-medium hover:underline">Forgot Password?</Link>
+                        <Link to="/forgot-password" className="text-gray-800 font-medium hover:underline">Forgot Password?</Link>
                     </p>
                 </div>
             </div>
