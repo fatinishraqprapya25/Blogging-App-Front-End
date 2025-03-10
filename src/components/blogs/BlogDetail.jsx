@@ -13,20 +13,15 @@ export default function BlogDetail() {
     const [timeNeedToRead, setTimeNeedToRead] = useState("");
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
+    const [loadedComments, setLoadedComments] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
 
     useEffect(() => {
         const fetchBlog = async () => {
-            const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/blogs/${id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
+            const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/blogs/${id}`);
             const result = await response.json();
 
             if (result.success) {
-                // format the date
                 const dateStr = result.data.blog.createdAt;
                 const date = new Date(dateStr);
                 const formattedDate = date.toLocaleDateString("en-GB", {
@@ -35,34 +30,15 @@ export default function BlogDetail() {
                     day: "2-digit"
                 });
 
-                // calculate time to read
-                let time = "";
-                const timesInSecond = result.data.timeNeedsToRead;
-                if (timesInSecond > 60) {
-                    const minute = (timesInSecond - (timesInSecond % 60)) / 60;
-                    const second = timesInSecond % 60;
-                    time = minute + " minutes " + second !== 0 ? second + " second" : "";
-                } else {
-                    time = timesInSecond + " second";
-                }
+                const seconds = result.data.timeNeedsToRead;
+                let time = seconds > 60
+                    ? `${Math.floor(seconds / 60)} min${seconds % 60 !== 0 ? ` ${seconds % 60}s` : ""}`
+                    : `${seconds}s`;
+
                 setTimeNeedToRead(time);
-
-                // calculate likes
-                const likesLength = result.data.blog.likes.length;
-                setLikeCount(likesLength);
-
+                setLikeCount(result.data.blog.likes.length);
                 setCreatedDate(formattedDate);
                 setBlog(result.data.blog);
-
-                // load comments
-                const commentReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${id}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-                const comments = await commentReq.json();
-                setComments(comments.data);
             }
         };
         fetchBlog();
@@ -71,8 +47,7 @@ export default function BlogDetail() {
     const handleLike = async () => {
         const token = localStorage.getItem("authToken");
         const authorization = `Bearer ${token}`;
-        console.log(token);
-        console.log(id);
+
         const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/blogs/like/${id}`, {
             method: "POST",
             headers: {
@@ -80,14 +55,27 @@ export default function BlogDetail() {
                 "Authorization": authorization
             }
         });
+
         const result = await response.json();
         if (result.success) {
-            setLikeCount(likeCount + 1);
+            setLikeCount(prev => prev + 1);
             alert(result.message);
         } else {
             alert(result.message);
         }
-    }
+    };
+
+    const loadComments = async () => {
+        if (loadedComments) {
+            setComments([]);
+            setLoadedComments(false);
+        } else {
+            const commentReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${id}`);
+            const result = await commentReq.json();
+            setComments(result.data);
+            setLoadedComments(true);
+        }
+    };
 
     if (!blog) return <div>Loading...</div>;
 
@@ -99,64 +87,87 @@ export default function BlogDetail() {
                     {/* Blog Title */}
                     <h1 className="text-3xl font-bold text-gray-900">{blog.title}</h1>
 
-                    <div className="flex">
-                        {/* Blog Date */}
-                        <div className="flex items-center mt-2 text-gray-600">
-                            <Pen style={{ width: "17px" }} className="mr-1 text-md" />
+                    <div className="flex flex-wrap items-center gap-4 mt-2 text-gray-600">
+                        <div className="flex items-center">
+                            <Pen className="w-4 mr-1" />
                             <p className="text-sm">{blogCreatedDate}</p>
                         </div>
-
-                        {/* time need to read */}
-                        <div className="flex items-center mt-2 text-gray-600 ms-3">
-                            <Timer style={{ width: "17px" }} className="mr-1 text-md" />
+                        <div className="flex items-center">
+                            <Timer className="w-4 mr-1" />
                             <p className="text-sm">{timeNeedToRead}</p>
                         </div>
-
                     </div>
 
-                    <div>
-                        <img src="https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg?t=st=1741517417~exp=1741521017~hmac=2dedc9b5f7cb82ed33cd0f60d128e8e4ed6f48fdb94032a5bcdb04b0bd7b7e46&w=740" alt="Blog Image" />
+                    <div className="mt-6">
+                        <img
+                            className="w-full rounded-md"
+                            src="https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg?t=st=1741517417~exp=1741521017~hmac=2dedc9b5f7cb82ed33cd0f60d128e8e4ed6f48fdb94032a5bcdb04b0bd7b7e46&w=740"
+                            alt="Blog Visual"
+                        />
                     </div>
 
                     {/* Blog Description */}
-                    <div className="mt-6 text-gray-800">
+                    <div className="mt-6 text-gray-800 leading-relaxed">
                         <p>{blog.description}</p>
                     </div>
 
                     {/* Like Button */}
                     <div className="mt-5 flex items-center">
-                        <Button onClick={handleLike} styles="flex items-center px-2">
-                            <ThumbsUp style={{ width: "16px" }} />
-                            <span className="block ms-1">Like</span>
+                        <Button onClick={handleLike} styles="flex items-center px-3 py-1.5">
+                            <ThumbsUp className="w-4" />
+                            <span className="ml-1">Like</span>
                         </Button>
-                        <p className="text-md font-medium ms-2">{likeCount > 0 ? `${likeCount} likes` : ""}</p>
+                        {likeCount > 0 && (
+                            <p className="ml-2 text-md font-medium">{likeCount} likes</p>
+                        )}
                     </div>
 
                     {/* Comments Section */}
-                    <div className="mt-8">
-                        <h2 className="text-xl font-semibold text-gray-900">Comments</h2>
+                    <div className="mt-12">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-4">Comments</h2>
 
                         {/* Comment Form */}
-                        <form className="mt-4 space-y-4">
+                        <form
+                            onSubmit={(e) => e.preventDefault()}
+                            className="bg-white"
+                        >
                             <textarea
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
-                                placeholder="Add a comment"
-                                className="w-full p-2 border border-gray-300 rounded-lg"
+                                placeholder="Write your comment here..."
+                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                                rows={4}
                             />
-                            <Button styles="flex items-center px-2">
-                                <MessageCircle style={{ width: "16px" }} />
-                                <span className="block ms-1">Comment</span>
-                            </Button>
+                            <div className="flex justify-end mt-2">
+                                <Button styles="flex items-center px-3 py-1.5">
+                                    <MessageCircle className="w-4" />
+                                    <span className="ml-1">Post Comment</span>
+                                </Button>
+                            </div>
                         </form>
 
+                        {/* Toggle Comments */}
+                        <div className="mt-6">
+                            <button
+                                className="text-black hover:underline font-medium cursor-pointer"
+                                onClick={loadComments}
+                            >
+                                {loadedComments ? "Hide Comments" : "Load All Comments"}
+                            </button>
+                        </div>
+
                         {/* Display Comments */}
-                        <div className="mt-6 space-y-4">
+                        <div className="mt-6 space-y-6">
                             {comments.map((comment, index) => (
-                                <div key={index} className=" pb-4">
-                                    <p className="font-semibold">{comment.author || "Anonymous"}</p>
-                                    <p>{comment.text}</p>
-                                    <p className="text-sm text-gray-500">{new Date(comment.date).toLocaleDateString()}</p>
+                                <div
+                                    key={index}
+                                    className="p-4 bg-gray-50 border border-gray-200 rounded-lg"
+                                >
+                                    <p className="font-semibold text-gray-800">{comment.author || "Anonymous"}</p>
+                                    <p className="text-gray-700 mt-1">{comment.text}</p>
+                                    <p className="text-xs text-gray-500 mt-2">
+                                        {new Date(comment.date).toLocaleDateString()}
+                                    </p>
                                 </div>
                             ))}
                         </div>
