@@ -74,16 +74,23 @@ export default function BlogDetail() {
             const result = await commentReq.json();
             const data = result.data;
 
-            const updatedComments = data.map((comment) => {
+            const updatedComments = await Promise.all(data.map(async (comment) => {
+                const userId = comment.userId;
+
+                const userReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/user/${userId}`);
+                const user = await userReq.json();
+                const userName = user.data.firstName + " " + user.data.lastName;
+                comment.userName = userName;
                 comment.date = new Date(comment.createdAt).toLocaleDateString("en-GB", {
                     year: "2-digit",
                     month: "long",
                     day: "2-digit"
                 });
                 return comment;
-            });
+            }));
 
             setComments(updatedComments);
+            console.log(comments);
             setLoadedComments(true);
         }
     };
@@ -175,7 +182,7 @@ export default function BlogDetail() {
                                     key={index}
                                     className="p-4 bg-gray-50 border border-gray-200 rounded-lg"
                                 >
-                                    <p className="font-semibold text-gray-800">{comment.author || "Anonymous"}</p>
+                                    <p className="font-semibold text-gray-800">{comment.userName}</p>
                                     <p className="text-gray-700 mt-1">{comment.text}</p>
                                     <p className="text-xs text-gray-500 mt-2">
                                         {comment.date}
