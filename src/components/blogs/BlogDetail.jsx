@@ -13,7 +13,6 @@ export default function BlogDetail() {
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const [likeCount, setLikeCount] = useState(0);
-    const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -47,13 +46,22 @@ export default function BlogDetail() {
                 }
                 setTimeNeedToRead(time);
 
-
                 // calculate likes
                 const likesLength = result.data.blog.likes.length;
                 setLikeCount(likesLength);
 
                 setCreatedDate(formattedDate);
                 setBlog(result.data.blog);
+
+                // load comments
+                const commentReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+                const comments = await commentReq.json();
+                setComments(comments.data);
             }
         };
         fetchBlog();
