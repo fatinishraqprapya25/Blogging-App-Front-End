@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
+import { useLocation } from "react-router-dom";
 
 export default function SendResetPasswordCode() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+    const location = useLocation();
+    const prevState = location.state;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
         setError("");
@@ -15,6 +18,14 @@ export default function SendResetPasswordCode() {
             setError("Please enter your email.");
             return;
         }
+
+        const requestBody = { email: prevState.email }
+        const sentCode = await fetch("https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/auth/sendVc", {
+            method: "POST",
+            body: JSON.stringify(requestBody)
+        });
+        const result = await sentCode.json();
+        console.log(result);
 
         setMessage("Reset code sent to your email.");
     };
