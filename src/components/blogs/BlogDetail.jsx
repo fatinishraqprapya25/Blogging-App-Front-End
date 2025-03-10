@@ -13,6 +13,7 @@ export default function BlogDetail() {
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const [likeCount, setLikeCount] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -46,12 +47,38 @@ export default function BlogDetail() {
                 }
                 setTimeNeedToRead(time);
 
+
+                // calculate likes
+                const likesLength = result.data.blog.likes.length;
+                setLikeCount(likesLength);
+
                 setCreatedDate(formattedDate);
                 setBlog(result.data.blog);
             }
         };
         fetchBlog();
     }, [id]);
+
+    const handleLike = async () => {
+        const token = localStorage.getItem("authToken");
+        const authorization = `Bearer ${token}`;
+        console.log(token);
+        console.log(id);
+        const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/blogs/like/${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": authorization
+            }
+        });
+        const result = await response.json();
+        if (result.success) {
+            setLikeCount(likeCount + 1);
+            alert(result.message);
+        } else {
+            alert(result.message);
+        }
+    }
 
     if (!blog) return <div>Loading...</div>;
 
@@ -88,11 +115,12 @@ export default function BlogDetail() {
                     </div>
 
                     {/* Like Button */}
-                    <div className="mt-8 flex items-center space-x-4">
-                        <Button styles="flex items-center px-2">
+                    <div className="mt-5 flex items-center">
+                        <Button onClick={handleLike} styles="flex items-center px-2">
                             <ThumbsUp style={{ width: "16px" }} />
                             <span className="block ms-1">Like</span>
                         </Button>
+                        <p className="text-md font-medium ms-2">{likeCount > 0 ? `${likeCount} likes` : ""}</p>
                     </div>
 
                     {/* Comments Section */}
