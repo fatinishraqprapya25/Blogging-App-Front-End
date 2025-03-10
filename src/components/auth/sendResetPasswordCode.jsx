@@ -26,7 +26,9 @@ export default function SendResetPasswordCode() {
         setMessage(result.message);
         if (result.success) {
             setTimeout(() => {
-                navigate("/");
+                navigate("/reset-password", {
+                    state: { email }
+                });
             }, 1500);
         }
     };
