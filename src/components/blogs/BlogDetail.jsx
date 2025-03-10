@@ -4,6 +4,7 @@ import Navbar from "../common/Navbar";
 import Container from "../common/Container";
 import { Timer, Pen, ThumbsUp, MessageCircle } from 'lucide-react';
 import Button from "../common/Button";
+import Footer from "../common/Footer";
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -152,7 +153,7 @@ export default function BlogDetail() {
                         {/* Display Comments */}
                         <div className="mt-6 space-y-4">
                             {comments.map((comment, index) => (
-                                <div key={index} className="border-b pb-4">
+                                <div key={index} className=" pb-4">
                                     <p className="font-semibold">{comment.author || "Anonymous"}</p>
                                     <p>{comment.text}</p>
                                     <p className="text-sm text-gray-500">{new Date(comment.date).toLocaleDateString()}</p>
@@ -162,6 +163,8 @@ export default function BlogDetail() {
                     </div>
                 </div>
             </Container>
+            <br />
+            <Footer />
         </>
     );
 }
