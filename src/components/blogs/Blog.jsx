@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
 
-export default function Blog({ index, blog }) {
+export default function Blog({ index, blog, id }) {
     const maxLength = 70;
     let shorterDescription = blog.description;
 
@@ -28,7 +28,7 @@ export default function Blog({ index, blog }) {
             <div className="absolute inset-0 flex flex-col justify-center p-6 text-white">
                 <h1 className="text-2xl font-bold mb-4 leading-7">{blog.title}</h1>
                 <p className="text-lg mb-4 leading-5 text-gray-200">{shorterDescription}</p>
-                <Link><Button path="google.com" styles="w-[100px] hover:bg-black">Read More..</Button></Link>
+                <Link to={`/blog/${id}`}><Button path="google.com" styles="w-[100px] hover:bg-black">Read More..</Button></Link>
             </div>
         </div>
     );
