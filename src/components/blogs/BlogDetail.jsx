@@ -5,6 +5,7 @@ import Container from "../common/Container";
 import { Timer, Pen, ThumbsUp, MessageCircle } from 'lucide-react';
 import Button from "../common/Button";
 import Footer from "../common/Footer";
+import useAuth from "../../hooks/useAuth";
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -15,7 +16,7 @@ export default function BlogDetail() {
     const [comments, setComments] = useState([]);
     const [loadedComments, setLoadedComments] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
-
+    const [isLoggedIn] = useAuth();
     useEffect(() => {
         const fetchBlog = async () => {
             const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/blogs/${id}`);
@@ -45,23 +46,27 @@ export default function BlogDetail() {
     }, [id]);
 
     const handleLike = async () => {
-        const token = localStorage.getItem("authToken");
-        const authorization = `Bearer ${token}`;
+        if (isLoggedIn) {
+            const token = localStorage.getItem("authToken");
+            const authorization = `Bearer ${token}`;
 
-        const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/blogs/like/${id}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": authorization
+            const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/blogs/like/${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": authorization
+                }
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                setLikeCount(prev => prev + 1);
+                alert(result.message);
+            } else {
+                alert(result.message);
             }
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            setLikeCount(prev => prev + 1);
-            alert(result.message);
         } else {
-            alert(result.message);
+            alert("User must be logged In!")
         }
     };
 

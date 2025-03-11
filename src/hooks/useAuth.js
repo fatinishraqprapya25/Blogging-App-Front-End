@@ -8,8 +8,15 @@ const useAuth = () => {
             const token = localStorage.getItem("authToken");
             if (token) {
                 try {
-                    const response = await fetch("https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/validate-token");
-                    if (!response.ok) {
+                    const response = await fetch("https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/auth/validate-token", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "token": token
+                        },
+                    });
+                    const result = await response.json();
+                    if (!result.success) {
                         localStorage.removeItem("authToken");
                         setLoggedIn(false);
                     } else {
@@ -17,7 +24,7 @@ const useAuth = () => {
                     }
 
                 } catch (err) {
-
+                    console.log(err);
                 }
             } else {
                 setLoggedIn(false);
