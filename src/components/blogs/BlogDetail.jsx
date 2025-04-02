@@ -17,6 +17,7 @@ export default function BlogDetail() {
     const [loadedComments, setLoadedComments] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [isLoggedIn] = useAuth();
+
     useEffect(() => {
         const fetchBlog = async () => {
             const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/blogs/${id}`);
@@ -69,6 +70,14 @@ export default function BlogDetail() {
             alert("User must be logged In!")
         }
     };
+
+    const handleComment = async () => {
+        if (!isLoggedIn) {
+            alert("User Must be loggedIn");
+        } else { 
+            
+        }
+    }
 
     const loadComments = async () => {
         if (loadedComments) {
