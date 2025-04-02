@@ -58,8 +58,8 @@ export default function Comment({ comment, setComments }) {
             </button>
 
             {showCommentBtns && <div>
-                <button onClick={editComment} className="text-blue-500 hover:underline block text-sm font-bold mt-[-5px]">Edit</button>
-                <button onClick={deleteComment} className="text-red-500 hover:underline block text-sm font-bold my-0 mt-[-6px]">Delete</button>
+                <button onClick={editComment} className="text-blue-500 hover:underline block text-sm font-bold mt-[-5px] cursor-pointer">Edit</button>
+                <button onClick={deleteComment} className="text-red-500 hover:underline block text-sm font-bold my-0 mt-[-6px] cursor-pointer">Delete</button>
             </div>}
         </div>}
 
