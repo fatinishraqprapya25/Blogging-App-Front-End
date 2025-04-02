@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
 import { MessageCircle } from "lucide-react";
+import formatDate from "../../utils/formatDate";
 
-export default function CreateComment({ isLoggedIn, blogId }) {
+export default function CreateComment({ isLoggedIn, blogId, isLoadedComments, setComments }) {
     const [comment, setComment] = useState("");
 
     const handleComment = async (e) => {
@@ -27,8 +28,23 @@ export default function CreateComment({ isLoggedIn, blogId }) {
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert("Comment added successfully!");
                     setComment("");
+                    const userId = result.data.userId;
+                    if (isLoadedComments) {
+                        const response = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/user/${userId}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        });
+                        const authorDetails = await response.json();
+                        const author = authorDetails.data.firstName + " " + authorDetails.data.lastName;
+
+                        const comment = { ...result.data, userName: author };
+                        comment.date = formatDate(comment.createdAt);
+
+                        setComments(prevComments => [comment, ...prevComments])
+                    }
                 }
             }
         } else {

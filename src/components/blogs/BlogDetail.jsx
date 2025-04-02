@@ -8,6 +8,7 @@ import Footer from "../common/Footer";
 import useAuth from "../../hooks/useAuth";
 import Comment from "./SingleComment";
 import CreateComment from "./CreateComment";
+import formatDate from "../../utils/formatDate";
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -90,11 +91,7 @@ export default function BlogDetail() {
                     const user = await userReq.json();
                     const userName = user.data.firstName + " " + user.data.lastName;
                     comment.userName = userName;
-                    comment.date = new Date(comment.createdAt).toLocaleDateString("en-GB", {
-                        year: "2-digit",
-                        month: "long",
-                        day: "2-digit"
-                    });
+                    comment.date = formatDate(comment.createdAt);
                     return comment;
                 }));
 
@@ -157,7 +154,7 @@ export default function BlogDetail() {
                     {/* Comments Section */}
                     <div className="mt-12">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Comments</h2>
-                        <CreateComment isLoggedIn={isLoggedIn} blogId={id} />
+                        <CreateComment isLoadedComments={loadedComments} setComments={setComments} isLoggedIn={isLoggedIn} blogId={id} />
 
                         {/* Toggle Comments */}
                         <div className="mt-6">
