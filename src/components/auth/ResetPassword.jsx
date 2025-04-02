@@ -31,6 +31,7 @@ export default function ResetPassword() {
             });
             const result = await response.json();
             if (result.success) {
+                setError(null);
                 setMessage(result.message);
                 setTimeout(() => {
                     navigate("/login");
