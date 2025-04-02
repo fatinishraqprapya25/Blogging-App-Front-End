@@ -71,11 +71,30 @@ export default function BlogDetail() {
         }
     };
 
-    const handleComment = async () => {
-        if (!isLoggedIn) {
-            alert("User Must be loggedIn");
-        } else { 
-            
+    const handleComment = async (e) => {
+        if (comment.length > 0) {
+            e.preventDefault();
+            if (!isLoggedIn) {
+                alert("User Must be loggedIn");
+            } else {
+                const data = JSON.stringify({
+                    blogId: id,
+                    text: comment
+                });
+                const token = localStorage.getItem("authToken");
+                const authorization = `Bearer ${token}`
+                const response = await fetch("https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": authorization
+                    },
+                    body: data
+                });
+                const result = await response.json();
+            }
+        } else {
+            alert("Comment box is empty!");
         }
     }
 
@@ -167,7 +186,7 @@ export default function BlogDetail() {
 
                         {/* Comment Form */}
                         <form
-                            onSubmit={(e) => e.preventDefault()}
+                            onSubmit={handleComment}
                             className="bg-white"
                         >
                             <textarea
@@ -199,7 +218,7 @@ export default function BlogDetail() {
                         <div className="mt-6 space-y-6">
                             {
                                 loadedComments && comments.length === 0 ? <p>
-                                    no comments found!
+                                    0 comments!
                                 </p> : comments.map((comment, index) => (
                                     <div
                                         key={index}
