@@ -6,6 +6,7 @@ import { Timer, Pen, ThumbsUp, MessageCircle } from 'lucide-react';
 import Button from "../common/Button";
 import Footer from "../common/Footer";
 import useAuth from "../../hooks/useAuth";
+import Comment from "./Comment";
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -220,17 +221,7 @@ export default function BlogDetail() {
                                 loadedComments && comments.length === 0 ? <p>
                                     0 comments!
                                 </p> : comments.map((comment, index) => (
-                                    <div
-                                        key={index}
-                                        className="p-4 bg-gray-50 border border-gray-200 rounded-lg"
-                                    >
-                                        <p className="font-semibold text-gray-800">{comment.userName}</p>
-                                        <p className="text-gray-700 mt-1">{comment.text}</p>
-                                        <p className="text-xs text-gray-500 mt-2">
-                                            {comment.date}
-                                        </p>
-
-                                    </div>
+                                    <Comment key={index} comment={comment} />
                                 ))
                             }
                         </div>
