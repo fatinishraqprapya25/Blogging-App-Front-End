@@ -37,7 +37,7 @@ export default function Login() {
             localStorage.setItem("authToken", token);
             navigate("/");
         } else {
-            alert(result.message);
+            setError(result.message);
         }
     };
 
@@ -58,7 +58,7 @@ export default function Login() {
                     {/* Password Field */}
                     <div className="mb-6">
                         <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">Password</label>
-                        <Input type="password" name="password" id="password" value={password} handler={setPassword} placeholder="Email Address" />
+                        <Input type="password" name="password" id="password" value={password} handler={setPassword} placeholder="Password" />
                     </div>
 
                     {/* Submit Button */}
