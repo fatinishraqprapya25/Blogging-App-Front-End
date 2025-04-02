@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Ellipsis } from 'lucide-react';
 import { jwtDecode } from "jwt-decode";
 
-export default function Comment({ comment, loadComments }) {
+export default function Comment({ comment, setComments }) {
     const [showCommentBtns, setShowCommentBtns] = useState(false);
 
     const decodedUser = () => {
@@ -29,13 +29,15 @@ export default function Comment({ comment, loadComments }) {
             const result = await response.json();
             if (result.success) {
                 alert(result.message);
-                loadComments();
+                setComments(prevComments => prevComments.filter(comment => comment._id !== result.data._id));
+                setShowCommentBtns(false);
             }
+
         }
     }
 
     const editComment = async () => {
-        
+
     }
 
     return <div

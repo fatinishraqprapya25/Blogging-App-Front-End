@@ -172,7 +172,7 @@ export default function BlogDetail() {
                                 loadedComments && comments.length === 0 ? <p>
                                     0 comments!
                                 </p> : comments.map((comment, index) => (
-                                    <Comment loadComments={loadComments} key={index} comment={comment} />
+                                    <Comment setComments={setComments} key={index} comment={comment} />
                                 ))
                             }
                         </div>
