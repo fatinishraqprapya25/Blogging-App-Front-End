@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../common/Navbar";
 import Container from "../common/Container";
-import { Timer, Pen, ThumbsUp, MessageCircle } from 'lucide-react';
+import { Timer, Pen, ThumbsUp } from 'lucide-react';
 import Button from "../common/Button";
 import Footer from "../common/Footer";
 import useAuth from "../../hooks/useAuth";
 import Comment from "./SingleComment";
+import CreateComment from "./CreateComment";
 
 export default function BlogDetail() {
     const { id } = useParams();
     const [blog, setBlog] = useState(null);
     const [blogCreatedDate, setCreatedDate] = useState(null);
     const [timeNeedToRead, setTimeNeedToRead] = useState("");
-    const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const [loadedComments, setLoadedComments] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
@@ -71,33 +71,6 @@ export default function BlogDetail() {
             alert("User must be logged In!")
         }
     };
-
-    const handleComment = async (e) => {
-        if (comment.length > 0) {
-            e.preventDefault();
-            if (!isLoggedIn) {
-                alert("User Must be loggedIn");
-            } else {
-                const data = JSON.stringify({
-                    blogId: id,
-                    text: comment
-                });
-                const token = localStorage.getItem("authToken");
-                const authorization = `Bearer ${token}`
-                const response = await fetch("https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": authorization
-                    },
-                    body: data
-                });
-                const result = await response.json();
-            }
-        } else {
-            alert("Comment box is empty!");
-        }
-    }
 
     const loadComments = async () => {
         if (loadedComments) {
@@ -184,26 +157,7 @@ export default function BlogDetail() {
                     {/* Comments Section */}
                     <div className="mt-12">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Comments</h2>
-
-                        {/* Comment Form */}
-                        <form
-                            onSubmit={handleComment}
-                            className="bg-white"
-                        >
-                            <textarea
-                                value={comment}
-                                onChange={(e) => setComment(e.target.value)}
-                                placeholder="Write your comment here..."
-                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                                rows={4}
-                            />
-                            <div className="flex justify-end mt-2">
-                                <Button styles="flex items-center px-3 py-1.5">
-                                    <MessageCircle className="w-4" />
-                                    <span className="ml-1">Post Comment</span>
-                                </Button>
-                            </div>
-                        </form>
+                        <CreateComment isLoggedIn={isLoggedIn} blogId={id} />
 
                         {/* Toggle Comments */}
                         <div className="mt-6">
