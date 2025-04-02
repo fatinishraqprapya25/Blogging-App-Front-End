@@ -35,7 +35,7 @@ export default function Comment({ comment, loadComments }) {
     }
 
     const editComment = async () => {
-
+        
     }
 
     return <div

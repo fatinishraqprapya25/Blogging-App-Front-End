@@ -6,7 +6,7 @@ import { Timer, Pen, ThumbsUp, MessageCircle } from 'lucide-react';
 import Button from "../common/Button";
 import Footer from "../common/Footer";
 import useAuth from "../../hooks/useAuth";
-import Comment from "./Comment";
+import Comment from "./SingleComment";
 
 export default function BlogDetail() {
     const { id } = useParams();
