@@ -10,6 +10,7 @@ import Comment from "./SingleComment";
 import CreateComment from "./CreateComment";
 import formatDate from "../../utils/formatDate";
 import generateUserNameFromUserModel from "../../utils/generateUserNameFromUserModel";
+import Rocket from "../../assets/Rocket.gif"
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -105,7 +106,11 @@ export default function BlogDetail() {
     };
 
 
-    if (!blog) return <div>Loading...</div>;
+    if (!blog) {
+        return <div className="h-screen flex items-center">
+            <img className="block mx-auto" src={Rocket} alt="" />
+        </div>
+    }
 
     return (
         <>

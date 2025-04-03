@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Blog from "./Blog";
+import Rocket from "../../assets/Rocket.gif"
 
 export default function BlogsSection() {
     const [blogs, setBlogs] = useState([]);
@@ -13,6 +14,11 @@ export default function BlogsSection() {
         fetchBlogs();
     }, []);
 
+    if (blogs.length === 0) {
+    return <div>
+        <img className="block mx-auto mt-30" src={Rocket} alt="" />
+    </div>
+    }
     return <>
         <Container>
             <div className="mt-8 gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
