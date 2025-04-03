@@ -92,8 +92,9 @@ export default function Comment({ comment, setComments }) {
             }
         );
         const replyData = await response.json();
+
         if (replyData.success) {
-            setReplies((prev) => [...prev, replyData.data]); // Add new reply
+            setReplies((prev) => replyData.data.replies);
             setReplyValue("");
             setShowReplyBox(false);
         }
