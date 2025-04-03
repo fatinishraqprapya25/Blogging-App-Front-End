@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Bell, Pencil, User, Search } from "lucide-react";
 import Container from "./Container";
 import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [isLoggedIn] = useAuth();
     const [showMobileSearch, setShowMobileSearch] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -17,6 +18,14 @@ export default function Navbar() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const handleBlogWrite = () => {
+        if (!isLoggedIn) {
+            alert("You must be logged in~!")
+        } else {
+            navigate("/write")
+        }
+    }
 
     return (
         <nav
@@ -51,7 +60,7 @@ export default function Navbar() {
                     </button>
 
                     {/* Write Button */}
-                    <button className="bg-white text-black px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-gray-200 transition">
+                    <button onClick={handleBlogWrite} className="bg-white text-black px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-gray-200 transition cursor-pointer">
                         <Pencil className="w-4 h-4" />
                         Write
                     </button>
