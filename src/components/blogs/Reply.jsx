@@ -45,7 +45,7 @@ export default function Reply({ commentId, reply, setReplies }) {
         if (deletedReply.success) {
             setReplies((prevReplies) =>
                 prevReplies.filter((r) => r._id !== replyId)
-            ); // Remove the deleted reply
+            );
             setShowReplyBtns(false);
         }
     };
