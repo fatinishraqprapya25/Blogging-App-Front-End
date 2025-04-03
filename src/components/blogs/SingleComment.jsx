@@ -38,7 +38,7 @@ export default function Comment({ comment, setComments }) {
 
         }
     }
-
+    
     const editComment = async (oldText) => {
         if (oldText !== newComment) {
             const token = localStorage.getItem("authToken");
@@ -55,7 +55,10 @@ export default function Comment({ comment, setComments }) {
             });
             const updatedComment = await response.json();
             setIsEditing(false);
+            setShowCommentBtns(false);
             alert("Comment updated successfully, reload comments section to see changes!");
+        } else {
+            setIsEditing(false);
         }
     }
 
