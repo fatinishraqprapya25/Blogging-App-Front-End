@@ -10,7 +10,8 @@ import Comment from "./SingleComment";
 import CreateComment from "./CreateComment";
 import formatDate from "../../utils/formatDate";
 import generateUserNameFromUserModel from "../../utils/generateUserNameFromUserModel";
-import Rocket from "../../assets/Rocket.gif"
+import Rocket from "../../assets/Rocket.gif";
+import LoadingDots from "../common/LoadingDots"
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -20,6 +21,7 @@ export default function BlogDetail() {
     const [comments, setComments] = useState([]);
     const [loadedComments, setLoadedComments] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
+    const [loadingComments, setLoadingComments] = useState(false);
     const [isLoggedIn] = useAuth();
 
     useEffect(() => {
@@ -80,9 +82,10 @@ export default function BlogDetail() {
             setComments([]);
             setLoadedComments(false);
         } else {
+            setLoadingComments(true);
             const commentReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${id}`);
             const result = await commentReq.json();
-
+            setLoadingComments(false);
             const data = result.data;
 
             if (data !== undefined) {
@@ -167,6 +170,9 @@ export default function BlogDetail() {
                                 onClick={loadComments}
                             >
                                 {loadedComments ? "Hide Comments" : "Load All Comments"}
+                                {
+                                    loadingComments ? <LoadingDots /> : ""
+                                }
                             </button>
                         </div>
 
