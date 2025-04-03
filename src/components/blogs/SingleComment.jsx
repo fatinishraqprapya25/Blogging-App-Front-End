@@ -64,6 +64,7 @@ export default function Comment({ comment, setComments }) {
                 }
                 return comment;
             }));
+            alert("Comment updated successfully!");
         } else {
             setIsEditing(false);
         }
