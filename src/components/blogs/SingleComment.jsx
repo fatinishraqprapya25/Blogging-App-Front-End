@@ -10,24 +10,23 @@ export default function Comment({ comment, setComments }) {
     const [isEditing, setIsEditing] = useState(false);
     const [replyValue, setReplyValue] = useState("");
     const [showReplyBox, setShowReplyBox] = useState(false);
-    const [showReplies, setShowReplies] = useState(false); // New state for showing replies
+    const [showReplies, setShowReplies] = useState(false);
+    const [replies, setReplies] = useState(comment.replies); // Manage replies here
 
     const decodedUser = () => {
         const token = localStorage.getItem("authToken");
         if (!token) return null;
         const decoded = jwtDecode(token);
-        if (decoded.id === comment.userId) return decoded;
-        return null;
+        return decoded.id === comment.userId ? decoded : null;
     };
 
     const deleteComment = async () => {
         const confirmation = confirm("Are you sure to delete?");
         if (confirmation) {
-            const commentId = comment._id;
             const token = localStorage.getItem("authToken");
             const authorization = `Bearer ${token}`;
             const response = await fetch(
-                `https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${commentId}`,
+                `https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${comment._id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -39,10 +38,9 @@ export default function Comment({ comment, setComments }) {
             const result = await response.json();
             if (result.success) {
                 alert(result.message);
-                setComments((prevComments) =>
-                    prevComments.filter((comment) => comment._id !== result.data._id)
+                setComments((prev) =>
+                    prev.filter((c) => c._id !== result.data._id)
                 );
-                setShowCommentBtns(false);
             }
         }
     };
@@ -51,10 +49,9 @@ export default function Comment({ comment, setComments }) {
         if (oldText !== newComment) {
             const token = localStorage.getItem("authToken");
             const authorization = `Bearer ${token}`;
-            const commentId = comment._id;
             const data = JSON.stringify({ text: newComment });
             const response = await fetch(
-                `https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${commentId}`,
+                `https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${comment._id}`,
                 {
                     method: "PATCH",
                     headers: {
@@ -66,12 +63,11 @@ export default function Comment({ comment, setComments }) {
             );
             const updatedComment = await response.json();
             setIsEditing(false);
-            setShowCommentBtns(false);
-            setComments((prevComments) =>
-                prevComments.map((comment) =>
-                    comment._id === updatedComment.data._id
-                        ? { ...comment, text: updatedComment.data.text }
-                        : comment
+            setComments((prev) =>
+                prev.map((c) =>
+                    c._id === updatedComment.data._id
+                        ? { ...c, text: updatedComment.data.text }
+                        : c
                 )
             );
             alert("Comment updated successfully!");
@@ -81,30 +77,31 @@ export default function Comment({ comment, setComments }) {
     };
 
     const handleReply = async () => {
+        if (!replyValue.trim()) return;
         const token = localStorage.getItem("authToken");
         const authorization = `Bearer ${token}`;
-        const commentId = comment._id;
-        const data = JSON.stringify({
-            text: replyValue,
-        });
         const response = await fetch(
-            `https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/reply/${commentId}`,
+            `https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/reply/${comment._id}`,
             {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: authorization,
                 },
-                body: data,
+                body: JSON.stringify({ text: replyValue }),
             }
         );
         const replyData = await response.json();
-        console.log(replyData);
+        if (replyData.success) {
+            setReplies((prev) => [...prev, replyData.data]); // Add new reply
+            setReplyValue("");
+            setShowReplyBox(false);
+        }
     };
 
     return (
         <>
-            <div className="p-4 flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg">
+            <div className="p-3 flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg">
                 <div>
                     <p className="font-semibold text-gray-800">{comment.userName}</p>
                     <p className="text-gray-700 mt-1">
@@ -132,7 +129,7 @@ export default function Comment({ comment, setComments }) {
                             className="text-sm font-medium text-gray-600 ms-3 underline"
                             onClick={() => setShowReplies(!showReplies)}
                         >
-                            {comment.replies.length} {comment.replies.length === 1 ? "reply" : "replies"}
+                            {replies.length} {replies.length === 1 ? "reply" : "replies"}
                         </button>
                     </div>
                     <p className="text-xs text-gray-500 mt-0">{comment.date}</p>
@@ -187,9 +184,14 @@ export default function Comment({ comment, setComments }) {
             {/* Display Replies */}
             {showReplies && (
                 <div className="ml-8 mt-2 border-l-2 border-gray-200 pl-4">
-                    {comment.replies.length > 0 ? (
-                        comment.replies.map((reply) => (
-                            <Reply key={reply._id} reply={reply} />
+                    {replies.length > 0 ? (
+                        replies.map((reply) => (
+                            <Reply
+                                key={reply._id}
+                                commentId={comment._id}
+                                reply={reply}
+                                setReplies={setReplies} // Pass setReplies
+                            />
                         ))
                     ) : (
                         <p className="text-gray-500 text-sm">No replies yet.</p>
