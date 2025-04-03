@@ -38,7 +38,7 @@ export default function Comment({ comment, setComments }) {
 
         }
     }
-    
+
     const editComment = async (oldText) => {
         if (oldText !== newComment) {
             const token = localStorage.getItem("authToken");
@@ -74,9 +74,14 @@ export default function Comment({ comment, setComments }) {
                     <Button onClick={() => editComment(comment.text)}>Update</Button>
                 </>}
             </p>
-            <p className="text-xs text-gray-500 mt-2">
+            <div className="flex">
+                <button className="font-medium underline cursor-pointer text-sm text-gray-600">reply</button>
+                <p className="text-sm font-medium text-gray-600 ms-3">{comment.replies.length} replies </p>
+            </div>
+            <p className="text-xs text-gray-500 mt-0">
                 {comment.date}
             </p>
+
         </div>
 
         {decodedUser() && <div>
