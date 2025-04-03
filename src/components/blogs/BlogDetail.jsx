@@ -9,6 +9,7 @@ import useAuth from "../../hooks/useAuth";
 import Comment from "./SingleComment";
 import CreateComment from "./CreateComment";
 import formatDate from "../../utils/formatDate";
+import generateUserNameFromUserModel from "../../utils/generateUserNameFromUserModel";
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -87,9 +88,7 @@ export default function BlogDetail() {
                 const updatedComments = await Promise.all(data.map(async (comment) => {
                     const userId = comment.userId;
 
-                    const userReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/user/${userId}`);
-                    const user = await userReq.json();
-                    const userName = user.data.firstName + " " + user.data.lastName;
+                    const userName = await generateUserNameFromUserModel(userId);
                     comment.userName = userName;
                     comment.date = formatDate(comment.createdAt);
                     return comment;
