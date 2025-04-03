@@ -85,7 +85,6 @@ export default function BlogDetail() {
             setLoadingComments(true);
             const commentReq = await fetch(`https://blogging-app-api-using-express-mongo-db-iwvr.vercel.app/api/v1/comments/${id}`);
             const result = await commentReq.json();
-            setLoadingComments(false);
             const data = result.data;
 
             if (data !== undefined) {
@@ -105,6 +104,7 @@ export default function BlogDetail() {
                 setLoadedComments(true);
             }
 
+            setLoadingComments(false);
         }
     };
 
