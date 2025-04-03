@@ -58,7 +58,12 @@ export default function Comment({ comment, setComments }) {
             const updatedComment = await response.json();
             setIsEditing(false);
             setShowCommentBtns(false);
-            alert("Comment updated successfully, reload comments section to see changes!");
+            setComments(prevComments => prevComments.map(comment => {
+                if (comment._id === updatedComment.data._id) {
+                    comment.text = updatedComment.data.text;
+                }
+                return comment;
+            }));
         } else {
             setIsEditing(false);
         }
