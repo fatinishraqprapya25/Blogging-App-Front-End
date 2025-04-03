@@ -24,7 +24,7 @@ export default function Navbar() {
         >
             <Container extraClasses="flex items-center justify-between flex-wrap gap-4">
                 {/* Logo */}
-                <div className="text-2xl font-bold">Medium</div>
+                <Link to="/"><div className="text-2xl font-bold">Medium</div></Link>
 
                 {/* Search Bar (Desktop only) */}
                 <div className="hidden md:block flex-1 max-w-sm">
