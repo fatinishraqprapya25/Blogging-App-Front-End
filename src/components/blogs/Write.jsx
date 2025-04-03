@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Container from "../common/Container";
 import Navbar from "../common/Navbar";
 import Footer from "../common/Footer";
 import Button from "../common/Button";
+import useAuth from "../../hooks/useAuth";
 
 export default function Write() {
+    const navigate = useNavigate();
+    const [isLoggedIn] = useAuth();
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/login");
+        }
+    }, [isLoggedIn, navigate]);
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState(null);
